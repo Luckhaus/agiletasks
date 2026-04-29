@@ -1,1 +1,110 @@
 
+#  AgileTasks - Sistema de Gerenciamento de Tarefas
+
+tarefas = []
+contador_id = 1
+
+
+def criar_tarefa():
+    global contador_id
+
+    titulo = input("Digite o título da tarefa: ")
+    prioridade = input("Prioridade (baixa, media, alta): ").lower()
+
+    if prioridade not in ["baixa", "media", "alta"]:
+        print("Prioridade inválida! Usando 'baixa' como padrão.")
+        prioridade = "baixa"
+
+    tarefa = {
+        "id": contador_id,
+        "titulo": titulo,
+        "prioridade": prioridade
+    }
+
+    tarefas.append(tarefa)
+    contador_id += 1
+
+    print("Tarefa criada com sucesso!")
+
+
+def listar_tarefas():
+    if not tarefas:
+        print("Nenhuma tarefa cadastrada.")
+        return
+
+    print("\n Lista de Tarefas:")
+    for tarefa in tarefas:
+        print(f"ID: {tarefa['id']} | Título: {tarefa['titulo']} | Prioridade: {tarefa['prioridade']}")
+
+
+def editar_tarefa():
+    listar_tarefas()
+    try:
+        id_tarefa = int(input("\nDigite o ID da tarefa que deseja editar: "))
+    except ValueError:
+        print("ID inválido!")
+        return
+
+    for tarefa in tarefas:
+        if tarefa["id"] == id_tarefa:
+            novo_titulo = input("Novo título: ")
+            nova_prioridade = input("Nova prioridade (baixa, media, alta): ").lower()
+
+            if nova_prioridade not in ["baixa", "media", "alta"]:
+                print("Prioridade inválida! Mantendo a anterior.")
+                nova_prioridade = tarefa["prioridade"]
+
+            tarefa["titulo"] = novo_titulo
+            tarefa["prioridade"] = nova_prioridade
+
+            print("Tarefa atualizada!")
+            return
+
+    print("Tarefa não encontrada!")
+
+
+def deletar_tarefa():
+    listar_tarefas()
+    try:
+        id_tarefa = int(input("\nDigite o ID da tarefa que deseja deletar: "))
+    except ValueError:
+        print("ID inválido!")
+        return
+
+    for tarefa in tarefas:
+        if tarefa["id"] == id_tarefa:
+            tarefas.remove(tarefa)
+            print("🗑️ Tarefa removida!")
+            return
+
+    print("Tarefa não encontrada!")
+
+
+def menu():
+    while True:
+        print("\n====== AgileTasks ======")
+        print("1. Criar tarefa")
+        print("2. Listar tarefas")
+        print("3. Editar tarefa")
+        print("4. Deletar tarefa")
+        print("5. Sair")
+
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == "1":
+            criar_tarefa()
+        elif opcao == "2":
+            listar_tarefas()
+        elif opcao == "3":
+            editar_tarefa()
+        elif opcao == "4":
+            deletar_tarefa()
+        elif opcao == "5":
+            print(" Fim do sistema...")
+            break
+        else:
+            print("Opção inválida!")
+
+
+if __name__ == "__main__":
+    menu()
